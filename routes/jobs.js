@@ -1,6 +1,6 @@
 require("dotenv");
 const router = require("express").Router();
-const User = require("../models/user");
+const User = require("../models/User");
 const Board = require("../models/Board");
 const Job = require("../models/Job");
 const joi = require("joi");
