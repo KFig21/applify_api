@@ -79,8 +79,8 @@ router.post("/new", async (req, res, next) => {
       return next(err);
     }
   } else {
-    console.log(error.details[0].message);
-    res.status(500).send(error.details[0].message);
+    console.log("error", error.details[0].message);
+    res.status(500).json({ message: error.details[0].message });
   }
 });
 
@@ -222,7 +222,7 @@ router.put("/edit", async (req, res, next) => {
     }
   } else {
     console.log(error.details[0].message);
-    res.status(500).send(error.details[0].message);
+    res.status(500).json({ message: error.details[0].message });
   }
 });
 

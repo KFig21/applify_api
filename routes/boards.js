@@ -90,7 +90,6 @@ router.get("/:id/:filter/:filterCol", async (req, res, next) => {
 
     data[0]["waiting"] = waiting;
     data[0]["applications"] = applications;
-    console.log(data);
     res.status(200).json(...data);
   } catch (err) {
     res.status(500).json(err);
@@ -99,7 +98,6 @@ router.get("/:id/:filter/:filterCol", async (req, res, next) => {
 
 // GET all boards from a user
 router.get("/all/:id", async (req, res, next) => {
-  console.log(req.params.id);
   try {
     const user = await User.findById(req.params.id).populate("boards");
 
