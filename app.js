@@ -13,6 +13,7 @@ const path = require("path");
 const authRouter = require("./routes/auth");
 const boardsRouter = require("./routes/boards");
 const jobsRouter = require("./routes/jobs");
+const utilsRouter = require("./routes/utils");
 
 // mongoDB setup
 const mongoDB = process.env.DB_CONNECTION_STRING;
@@ -39,6 +40,7 @@ app.use(morgan("common"));
 app.use("/api/auth", authRouter);
 app.use("/api/boards", boardsRouter);
 app.use("/api/jobs", jobsRouter);
+app.use("/api/utils", utilsRouter);
 
 // view engine setup needed to keep from erroring out - ignore
 app.set("views", path.join(__dirname, "views"));
