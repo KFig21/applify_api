@@ -6,7 +6,7 @@ const router = require("express").Router();
 router.post("/scrape", async (req, res, next) => {
     const url = req.body.url
     const data = await scrapeJobDetails(url)
-    res.json(data)
+    res.status(200).json(data)
 })
 
 module.exports = router;
