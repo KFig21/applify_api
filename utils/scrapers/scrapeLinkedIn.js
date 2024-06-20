@@ -1,64 +1,81 @@
-async function scrapeLinkedIn(page) {
-    
-    return await page.evaluate(() => {
+const { By, until } = require('selenium-webdriver');
 
-        const getText = (selector) => {
-            const element = document.querySelector(selector);
-            return element ? element.innerText.trim() : 'n/a';
-        };
+async function scrapeLinkedIn(driver) {
+  let jobDetails;
 
-        const getPayScale = () => {
-            const payElement = document.querySelector('.salary');
-            if (payElement) {
-                const payText = payElement.innerText.trim();
-                const payScaleMatch = payText.match(/(\$\d+K?-\$\d+K?)|(\$\d+K?)/);
-                if (payScaleMatch) {
-                return payScaleMatch[0];
-                }
-            }
-            return 'n/a';
-        };
+  try {
+    // Wait for the job title to be visible
+    await driver.wait(until.elementLocated(By.css('.topcard__title')), 1000);
 
-        const jobTypeMatch = document.body.innerText.match(/(Full-time|Part-time|Contract)/i);
-        const jobType = jobTypeMatch ? jobTypeMatch[0] : 'n/a';
+    // Extract job details
+    jobDetails = await driver.executeScript(() => {
+      const getText = (selector) => {
+        const element = document.querySelector(selector);
+        return element ? element.innerText.trim() : 'n/a';
+      };
 
-        const remoteMatch = document.body.innerText.match(/(Remote)/i);
-        const remote = remoteMatch ? 'yes' : 'no';
-
-        const location = getText('.topcard__flavor--bullet');
-        let city = 'Remote';
-        let state = 'NA';
-
-        // Parse location into city and state
-        if (location.includes(',')) {
-            const parts = location.split(',').map(part => part.trim());
-            city = parts[0];
-            state = parts[1];
-        } else if (location.toLowerCase().includes('united states')) {
-            state = 'Remote'
+      const getPayScale = () => {
+        const payElement = document.querySelector('.salary-text');
+        if (payElement) {
+          const payText = payElement.innerText.trim();
+          return payText;
         }
+        return 'n/a';
+      };
 
-        // Extract and clean up notes
-        let notes = getText('.description__text');
-        const showMoreRegex = /Show more$/;
-        if (showMoreRegex.test(notes)) {
-            notes = notes.replace(showMoreRegex, '').trim();
-        }
+      const jobTypeElement = document.querySelector('.job-type-text');
+      const jobType = jobTypeElement ? jobTypeElement.textContent.trim() : 'n/a';
 
-        return {
-            companyName: getText('.topcard__org-name-link'),
-            jobTitle: getText('h1'),
-            city,
-            state,
-            jobType,
-            remote,
-            jobSite: 'LinkedIn',
-            payType: document.querySelector('.salary') ? 'salary' : 'n/a',
-            payScale: getPayScale(),
-            payAmount: getPayScale(),
-            notes,
-        };
+      const remoteElement = document.querySelector('.location-text');
+      const remote = remoteElement && remoteElement.textContent.includes('Remote') ? 'yes' : 'no';
+
+      const locationElement = document.querySelector('.location-text');
+      const location = locationElement ? locationElement.textContent.trim() : 'n/a';
+      let city = 'n/a';
+      let state = 'n/a';
+
+      // Parse location into city and state
+      if (location.includes(',')) {
+        const parts = location.split(',').map(part => part.trim());
+        city = parts[0];
+        state = parts[1];
+      } else if (location.toLowerCase().includes('united states')) {
+        state = 'United States'; // or handle based on your specific logic
+      }
+
+      return {
+        companyName: getText('.topcard__org-name-link'),
+        jobTitle: getText('.topcard__title'),
+        city,
+        state,
+        jobType,
+        remote,
+        jobSite: 'LinkedIn',
+        payType: document.querySelector('.salary-text') ? 'salary' : 'n/a',
+        payScale: getPayScale(),
+        payAmount: getPayScale(),
+        notes: getText('.description__text')
+      };
     });
-};
+
+  } catch (error) {
+    console.error('Error during LinkedIn scraping:', error);
+    jobDetails = {
+      companyName: 'n/a',
+      jobTitle: 'n/a',
+      city: 'n/a',
+      state: 'n/a',
+      jobType: 'n/a',
+      remote: 'no',
+      jobSite: 'LinkedIn',
+      payType: 'n/a',
+      payScale: 'n/a',
+      payAmount: 'n/a',
+      notes: 'n/a'
+    };
+  }
+
+  return jobDetails;
+}
 
 module.exports = { scrapeLinkedIn };
