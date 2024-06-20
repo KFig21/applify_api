@@ -31,8 +31,8 @@ async function scrapeLinkedIn(driver) {
 
       const locationElement = document.querySelector('.location-text');
       const location = locationElement ? locationElement.textContent.trim() : 'n/a';
-      let city = 'n/a';
-      let state = 'n/a';
+      let city = 'Remote';
+      let state = 'NA';
 
       // Parse location into city and state
       if (location.includes(',')) {
@@ -40,7 +40,7 @@ async function scrapeLinkedIn(driver) {
         city = parts[0];
         state = parts[1];
       } else if (location.toLowerCase().includes('united states')) {
-        state = 'United States'; // or handle based on your specific logic
+        state = 'NA'; // or handle based on your specific logic
       }
 
       return {

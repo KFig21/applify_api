@@ -29,8 +29,8 @@ async function scrapeIndeed(driver) {
       const remote = jobTypeElement && jobTypeElement.textContent.includes('Remote') ? 'yes' : 'no';
 
       const location = getText('.jobsearch-JobInfoHeader-subtitle > div:nth-child(2)');
-      let city = 'n/a';
-      let state = 'n/a';
+      let city = 'Remote';
+      let state = 'NA';
 
       // Parse location into city and state
       if (location.includes(',')) {
@@ -38,7 +38,7 @@ async function scrapeIndeed(driver) {
         city = parts[0];
         state = parts[1];
       } else if (location.toLowerCase().includes('united states')) {
-        state = 'United States'; // or handle based on your specific logic
+        state = 'NA'; // or handle based on your specific logic
       }
 
       return {
