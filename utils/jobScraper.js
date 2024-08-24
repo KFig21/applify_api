@@ -6,7 +6,7 @@ const { scrapeIndeed } = require('./scrapers/scrapeIndeed');
 
 async function scrapeJobDetails(url) {
   let jobDetails;
-
+console.log('scrapeJobDetails')
   // Configure Chrome options
   let chromeOptions = new chrome.Options();
   chromeOptions.addArguments('--headless'); // Run in headless mode
@@ -17,11 +17,28 @@ async function scrapeJobDetails(url) {
   chromeOptions.addArguments('--disable-web-security'); // Disable web security
   chromeOptions.addArguments('--ignore-certificate-errors'); // Ignore certificate errors
   chromeOptions.addArguments('--disable-infobars'); // Disable infobars
-  // Initialize WebDriver
-  const driver = await new Builder()
-    .forBrowser('chrome')
-    .setChromeOptions(chromeOptions)
-    .build();
+  try {
+    // Initialize WebDriver
+    const driver = await new Builder()
+        .forBrowser('chrome')
+        .setChromeOptions(chromeOptions)
+        .build();
+
+    // Your test code goes here
+    await driver.get('http://www.example.com');
+  } catch (error) {
+      // Handle initialization error
+      console.error('Failed to initialize WebDriver:', error.message);
+      if (error.name === 'SessionNotCreatedError') {
+          console.error('Check that the ChromeDriver version matches the installed Chrome version.');
+      } else {
+          console.error('An unexpected error occurred:', error);
+      }
+  } finally {
+      if (driver) {
+          await driver.quit();
+      }
+  }
 
   try {
     // Navigate to the job listing URL
