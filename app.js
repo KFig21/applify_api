@@ -29,15 +29,6 @@ const corsOptions = {
 };
 app.use(cors(corsOptions)); // Use this after the variable declaration
 app.options("*", cors());
-
-// additional CORS middleware
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
-  next();
-});
-
 //middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
