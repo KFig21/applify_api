@@ -22,12 +22,19 @@ const db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
 // cors middleware
+const allowedOrigins = [
+  'https://kfig21.github.io',
+  'http://localhost:3001', // Add your local development URL
+];
+
 const corsOptions = {
-  credentials: true, //access-control-allow-credentials:true
+  origin: allowedOrigins,
+  credentials: true, // This is optional, only needed if you are using cookies or HTTP authentication
   optionSuccessStatus: 200,
 };
-app.use(cors(corsOptions)); // Use this after the variable declaration
-app.use(cors({ origin: 'https://kfig21.github.io/', }))
+
+app.use(cors(corsOptions)); // Use this before your routes
+app.options("*", cors(corsOptions)); // This will handle preflight requests
 
 //middleware
 app.use(bodyParser.json());
