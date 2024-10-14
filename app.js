@@ -21,9 +21,11 @@ mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
+const allowedOrigins = ['https://kfig21.github.io']; // Add your specific GitHub Pages URL here
+
 // cors middleware
 const corsOptions = {
-  origin: "*",
+  origin: allowedOrigins,
   credentials: true, //access-control-allow-credentials:true
   optionSuccessStatus: 200,
 };
