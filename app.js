@@ -22,11 +22,27 @@ const db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
 // cors middleware
+
+// prod
+
+const allowedOrigins = [
+  'https://kfig21.github.io', // GitHub Pages URL
+];
+
 const corsOptions = {
-  origin: "*",
-  credentials: true, //access-control-allow-credentials:true
-  optionSuccessStatus: 200,
+  origin: allowedOrigins,
+  credentials: true, // Enable set cookie on the client side
+  optionsSuccessStatus: 200, // For legacy browser support
 };
+
+//dev
+
+// const corsOptions = {
+//   origin: "*",
+//   credentials: true, //access-control-allow-credentials:true
+//   optionSuccessStatus: 200,
+// };
+
 app.use(cors(corsOptions)); // Use this after the variable declaration
 app.options("*", cors());
 //middleware
