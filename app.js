@@ -21,6 +21,13 @@ mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
+//middleware
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.json());
+app.use(helmet());
+app.use(morgan("common"));
+
 // cors middleware
 const corsOptions = {
   origin: "*",
@@ -29,12 +36,6 @@ const corsOptions = {
 };
 app.use(cors(corsOptions)); // Use this after the variable declaration
 app.options("*", cors());
-//middleware
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(express.json());
-app.use(helmet());
-app.use(morgan("common"));
 
 // use routes
 app.use("/api/auth", authRouter);
@@ -61,10 +62,5 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.render("error");
 });
-
-// const port = 3001;
-// app.listen(port, () => {
-//   console.log(`Example app listening on port ${port}!`);
-// });
 
 module.exports = app;
