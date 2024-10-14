@@ -22,13 +22,8 @@ const db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
 // cors middleware
-const allowedOrigins = [
-  'https://kfig21.github.io',
-  'http://localhost:3001', // Add your local development URL
-];
-
 const corsOptions = {
-  origin: allowedOrigins,
+  origin: "*",
   credentials: true, // This is optional, only needed if you are using cookies or HTTP authentication
   optionSuccessStatus: 200,
 };
