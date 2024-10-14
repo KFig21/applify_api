@@ -41,7 +41,7 @@ app.options("*", cors());
 app.use("/api/auth", authRouter);
 app.use("/api/boards", boardsRouter);
 app.use("/api/jobs", jobsRouter);
-app.use("/api/utils", utilsRouter);
+// app.use("/api/utils", utilsRouter);
 
 // view engine setup needed to keep from erroring out - ignore
 app.set("views", path.join(__dirname, "views"));
