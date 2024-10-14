@@ -21,6 +21,14 @@ mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
+// cors middleware
+const corsOptions = {
+  credentials: true, //access-control-allow-credentials:true
+  optionSuccessStatus: 200,
+};
+app.use(cors(corsOptions)); // Use this after the variable declaration
+app.use(cors({ origin: 'https://kfig21.github.io/', }))
+
 //middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -28,14 +36,6 @@ app.use(express.json());
 app.use(helmet());
 app.use(morgan("common"));
 
-// cors middleware
-const corsOptions = {
-  origin: "*",
-  credentials: true, //access-control-allow-credentials:true
-  optionSuccessStatus: 200,
-};
-app.use(cors(corsOptions)); // Use this after the variable declaration
-app.options("*", cors());
 
 // use routes
 app.use("/api/auth", authRouter);
