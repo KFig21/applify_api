@@ -29,7 +29,7 @@ const corsOptions = {
   credentials: true, //access-control-allow-credentials:true
   optionSuccessStatus: 200,
 };
-app.use(cors(corsOptions)); // Use this after the variable declaration
+app.use(cors()); // Use this after the variable declaration
 app.options("*", cors());
 //middleware
 app.use(bodyParser.json());
