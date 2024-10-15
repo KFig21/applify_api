@@ -1,1 +1,1 @@
-web: node jobScraper.js
+web: npm start
