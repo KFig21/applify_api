@@ -10,7 +10,6 @@ const cors = require("cors");
 const path = require("path");
 
 // cors middleware
-const cors = require("cors");
 const corsOptions = {
   origin: "https://kfig21.github.io",
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
