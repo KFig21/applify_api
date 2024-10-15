@@ -10,14 +10,16 @@ const cors = require("cors");
 const path = require("path");
 
 // cors middleware
-const corsOptions = {
-  origin: "*",
-  credentials: true, // This is optional, only needed if you are using cookies or HTTP authentication
-  optionSuccessStatus: 200,
-};
+// const corsOptions = {
+//   origin: "*",
+//   credentials: true, // This is optional, only needed if you are using cookies or HTTP authentication
+//   optionSuccessStatus: 200,
+// };
+app.options("*", cors())
+app.use(cors({ origin: true }));
 
-app.use(cors(corsOptions)); // Use this before your routes
-app.options("*", cors(corsOptions)); // This will handle preflight requests
+// app.use(cors(corsOptions)); // Use this before your routes
+// app.options("*", cors(corsOptions)); // This will handle preflight requests
 
 // mongoDB setup
 const mongoDB = process.env.DB_CONNECTION_STRING;
