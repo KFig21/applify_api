@@ -9,27 +9,21 @@ const createError = require("http-errors");
 const cors = require("cors");
 const path = require("path");
 
-// import routes
-const authRouter = require("./routes/auth");
-const boardsRouter = require("./routes/boards");
-const jobsRouter = require("./routes/jobs");
-const utilsRouter = require("./routes/utils");
-
-// mongoDB setup
-const mongoDB = process.env.DB_CONNECTION_STRING;
-mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
-const db = mongoose.connection;
-db.on("error", console.error.bind(console, "MongoDB connection error:"));
-
 // cors middleware
 const corsOptions = {
-  origin: true,
+  origin: "*",
   credentials: true, // This is optional, only needed if you are using cookies or HTTP authentication
   optionSuccessStatus: 200,
 };
 
 app.use(cors(corsOptions)); // Use this before your routes
 app.options("*", cors(corsOptions)); // This will handle preflight requests
+
+// mongoDB setup
+const mongoDB = process.env.DB_CONNECTION_STRING;
+mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
+const db = mongoose.connection;
+db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
 //middleware
 app.use(bodyParser.json());
@@ -38,6 +32,11 @@ app.use(express.json());
 app.use(helmet());
 app.use(morgan("common"));
 
+// import routes
+const authRouter = require("./routes/auth");
+const boardsRouter = require("./routes/boards");
+const jobsRouter = require("./routes/jobs");
+const utilsRouter = require("./routes/utils");
 
 // use routes
 app.use("/api/auth", authRouter);
