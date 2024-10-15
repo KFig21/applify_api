@@ -11,13 +11,33 @@ const path = require("path");
 
 // cors middleware
 const corsOptions = {
-  origin: "https://kfig21.github.io/",
-  credentials: true, // This is optional, only needed if you are using cookies or HTTP authentication
-  optionSuccessStatus: 200,
+  origin: "https://kfig21.github.io", // Allow requests from your frontend
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS", // Include all necessary methods
+  credentials: true, // Allow credentials like cookies or HTTP authentication
+  allowedHeaders: "Content-Type,Authorization", // Allow necessary headers
+  optionsSuccessStatus: 200, // Status for successful preflight requests
 };
 
-app.use(cors(corsOptions)); // Use this before your routes
-app.options("*", cors(corsOptions)); // This will handle preflight requests
+// Enable CORS for all routes
+app.use(cors(corsOptions));
+
+// Handle preflight requests (OPTIONS method)
+app.options("*", cors(corsOptions));
+
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "https://kfig21.github.io");
+  res.header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  next();
+});
+
+app.options("/api/*", (req, res) => {
+  res.header("Access-Control-Allow-Origin", "https://kfig21.github.io");
+  res.header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.sendStatus(200); // Respond OK to preflight
+});
+
 
 // mongoDB setup
 const mongoDB = process.env.DB_CONNECTION_STRING;
